@@ -1,15 +1,20 @@
 #include <Arduino.h>
 
-// Josh Williams 2023, GigaSketch
+// Josh Williams 2023, Gizmo, GigaSketch
 
-// this code makes the workings of a giant etch a sketch.
-// It uses two rotary encoder, two stepper motors and 4
-// limit switches to controll the interface
-// it then has a built in game function which allows the user
+// This code makes the workings of a giant etch a sketch.
+// It uses two rotary encoders, two stepper motors and four
+// limit switches to controll the interface.
+// It then has a built in game function which allows the user
 // to find a randomly selected point on the table.
 
 // This code can be sampled and edited, but any work must be
 // credited to Josh Williams.
+
+// NOTE TO HELPFUL SOURCES:
+// How to Mecatronics webpage 'Stepper motors and arduino' was
+// very helpful to get me off and running with controlling stepper motors.
+// link: https://howtomechatronics.com/tutorials/arduino/stepper-motors-and-arduino-the-ultimate-guide/
 
 #include <LiquidCrystal.h>
 // LCD libruary is required to make the lcd screen dispay
