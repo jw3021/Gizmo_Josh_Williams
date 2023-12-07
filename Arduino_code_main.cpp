@@ -54,15 +54,15 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 #define switch2_Y 13
 // initiating millis for the led blink and the counter
 unsigned long previousMillis = 0;
-// making the distance to bomb a global variable
-float distanceToBomb;
+// making the distance to mine a global variable
+float distanceToMine;
 // setting the target values as global variables to be changed by the ramdon genarator later
 int targetX;
 int targetY;
 const int movesY = 62; // the number of clicks per Y axis
 const int movesX = 41; // the number of clicks per X axis
 
-int bombcount = 0; // tracking how many bombs have been found per game
+int MineCount = 0; // tracking how many mines have been found per game
 
 // setting stepper settings, these are changed depending on how much
 // and how quick you want the ball to move per click of the rotary encoder
@@ -144,7 +144,7 @@ void setup()
     lcd.begin(16, 2);
     // Print a message to the LCD. This will remain constant
     // throughout the whole code
-    lcd.print("Bombs Found:");
+    lcd.print("Mines Found:");
 
     // declaring the limit switch pins as input
     pinMode(switch1_X, INPUT_PULLUP); // Set switch 1 as an input, using pullup to give a high logic level
@@ -167,7 +167,7 @@ void setup()
     speed = 200;
     delay(1000);
 
-    // randomly selecting the location of the first bomb
+    // randomly selecting the location of the first mine
     // Note that the randonseed is used to create a different
     // set of random numbers each time the code is run.
     randomSeed(analogRead(0));
@@ -181,7 +181,7 @@ void setup()
     Serial.print(", targetY = ");
     Serial.println(targetY);
 }
-// Function to calculate the straight line distance to the bomb point.
+// Function to calculate the straight line distance to the Mine point.
 // This uses the Eclidean distance formula.
 void calculateAndPrintDistance(int x1, int y1, int x2, int y2)
 {
@@ -190,20 +190,20 @@ void calculateAndPrintDistance(int x1, int y1, int x2, int y2)
     y1 = constrain(y1, 0, movesY);
 
     // Euclidean distance formula
-    distanceToBomb = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+    distanceToMine = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
     // Print the distance (this is only for de-bugging):
     Serial.print("Distance is: ");
-    Serial.println(distanceToBomb);
+    Serial.println(distanceToMine);
     // Checking if the ball is within the specified range.
     // If the ball is, then add one to the counter and re-assign a new
-    // random variable for the bomb position.
-    if (distanceToBomb < ballrange)
+    // random variable for the Mine position.
+    if (distanceToMine < ballrange)
     {
-        Serial.println("bomb found");
-        bombcount = bombcount + 1;
-        Serial.println(bombcount);
-        Serial.print("is now your bombcount");
-        // turn the green led on when the bomb has been found
+        Serial.println("Mine found");
+        MineCount = MineCount + 1;
+        Serial.println(MineCount);
+        Serial.print("is now your MineCount");
+        // turn the green led on when the Mine has been found
         digitalWrite(ledgreen, HIGH);
         delay(1500);
         digitalWrite(ledgreen, LOW);
@@ -421,9 +421,9 @@ void loop()
         if (millis() - lastButtonPressY > 50)
         {
             Serial.println("Button Y pressed!");
-            bombcount = 0;
+            MineCount = 0;
             lcd.setCursor(0, 1);
-            lcd.print("reset game!");
+            lcd.print("Reset game!");
             delay(5000);
             lcd.setCursor(0, 1);
             lcd.print("              ");
@@ -433,7 +433,7 @@ void loop()
         lastButtonPressY = millis();
     }
     // this is calculating appopriate flash rate using a map function
-    int flashRate = map(distanceToBomb, 0, 70, 100, 2000);
+    int flashRate = map(distanceToMine, 0, 70, 100, 2000);
 
     // Check if it's time to update the LED.
     unsigned long currentMillis = millis();
@@ -446,5 +446,5 @@ void loop()
     }
     lcd.setCursor(0, 1);
     // print the number of seconds since reset:
-    lcd.print(bombcount);
+    lcd.print(MineCount);
 }
